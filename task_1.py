@@ -1,6 +1,7 @@
 from csv import writer
 from random import choice
 
+import os
 import sqlalchemy
 import pymongo
 import string
@@ -15,6 +16,8 @@ TEST_DATA_FILE = 'tests/data/data_for_test.csv'
 # A. Сгенерировать csv файл из 1024 записей по 6 столбцов, заполненных
 # строками случайных символов (цифры и латинские буквы) длиной по 8 символов.
 def file_creator():
+    if not os.path.exists('output'):
+        os.makedirs('output')
     with open('output/file_a.csv', 'w') as my_file:
         wr = writer(my_file)
         for i in range(NUMBER_OF_FIELDS):
