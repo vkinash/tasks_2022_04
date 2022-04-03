@@ -2,6 +2,7 @@ from csv import writer
 from random import choice
 
 import sqlalchemy
+import pymongo
 import string
 import pandas as pd
 
@@ -45,7 +46,6 @@ def get_data(data_file='output/file_a.csv'):
 
 # C. Считать содержимое файла из пункта А, создать программно базу данных mysql, сохранить все данные в таблицу.
 # Средствами sql удалить записи, в которых во втором столбце первый символ цифра.
-
 def get_engine():
     return sqlalchemy.create_engine('mysql+pymysql://admin:admin@localhost/db')
 
@@ -66,8 +66,31 @@ def delete_data_from_mysql():
         )
 
 
+def get_my_collection():
+    client = pymongo.MongoClient("mongodb://localhost:27017/mydb", username='admin', password='admin')
+    db = client["mydb"]
+    return db["my_collection"]
+
+
+def write_to_mongodb():
+    collection = get_my_collection()
+    df = get_data()
+    df.columns = ['col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col_6']
+    df = df.to_dict('records')
+    collection.insert_many(df)
+
+
+# D. Считать содержимое файла из пункта А, создать программно базу данных mongodb, сохранить все данные в коллекцию.
+# Средствами mongo удалить записи, в которых в третьем столбце первый символ буква.
+def delete_data_from_mongodb():
+    collection = get_my_collection()
+    collection.delete_many({'col_3': {'$regex': '^[a-z]+', '$options': 'i'}})
+
+
 if __name__ == "__main__":
     file_creator()
     replace_symbols()
     write_to_mysql()
     delete_data_from_mysql()
+    write_to_mongodb()
+    delete_data_from_mongodb()
