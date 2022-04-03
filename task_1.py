@@ -79,8 +79,7 @@ def write_to_mongodb():
     collection = get_my_collection()
     df = get_data()
     df.columns = ['col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col_6']
-    df = df.to_dict('records')
-    collection.insert_many(df)
+    collection.insert_many(df.to_dict('records'))
 
 
 # D. Считать содержимое файла из пункта А, создать программно базу данных mongodb, сохранить все данные в коллекцию.
