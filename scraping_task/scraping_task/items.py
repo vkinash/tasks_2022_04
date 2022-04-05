@@ -6,7 +6,18 @@
 import scrapy
 
 
-class ScrapingTaskItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class ComputerItem(scrapy.Item):
+    name = scrapy.Field()
+    price = scrapy.Field()
+    reviews = scrapy.Field()
+    video_card = scrapy.Field()
+    video_memory = scrapy.Field()
+    processor = scrapy.Field()
+    number_of_cores = scrapy.Field()
+    ram = scrapy.Field()
+    ssd = scrapy.Field()
+    hdd = scrapy.Field()
+    motherboard = scrapy.Field()
+    # These attributes names are used by default for images processing.
+    image_urls = scrapy.Field()
+    images = scrapy.Field()

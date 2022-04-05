@@ -1,12 +1,14 @@
-from csv import writer
-
 import os
 import scrapy
+from scraping_task.items import ComputerItem
 
-
+custom_settings = {"IMAGES_STORE": '/home/vlad/PycharmProjects/tasks/scraping_task/scraping_task/output/img',
+                    "ITEM_PIPELINES": {'scrapy.pipelines.images.ImagesPipeline': 1}
+    }
 class PCSpider(scrapy.Spider):
     name = "pc"
     start_urls = ["https://it-blok.com.ua/computeri.html"]
+    base_url = "https://it-blok.com.ua/"
 
     if not os.path.exists('output'):
         os.makedirs('output')
@@ -15,10 +17,9 @@ class PCSpider(scrapy.Spider):
         links = response.css('div.button-group a::attr(href)')
         yield from response.follow_all(links, self.parse_pc)
 
-        next_page = response.css('a.next-pagination::attr(href)').get()
-        if next_page is not None:
-            yield response.follow(next_page, self.parse)
-
+        # next_page = response.css('a.next-pagination::attr(href)').get()
+        # if next_page is not None:
+        #     yield response.follow(next_page, self.parse)
 
     def parse_pc(self, response):
         if response.css('tbody:nth-of-type(7) > tr > td:nth-of-type(1)::text').get()[5:] == 'HDD':
@@ -26,18 +27,37 @@ class PCSpider(scrapy.Spider):
         else:
             HDD, SSD = '-', '+'
 
-        yield {
-            'PC name': response.css('div.pp-m-blok h1::text').get(),
-            'Price': response.css('span.autocalc-product-special::text').get(),
-            'Reviews': response.css('ul.nav.nav-tabs a::text')[4].re(r'\d')[0],
-            'Image': '',
-            'Video card': response.css('tbody:nth-of-type(6) > tr:nth-of-type(2) > td:nth-of-type(2)::text').get(),
-            'Video memory': response.css('tbody:nth-of-type(6) > tr:nth-of-type(3) > td:nth-of-type(2)::text').get(),
-            'Processor': response.css('tbody:nth-of-type(2) > tr:nth-of-type(1) > td:nth-of-type(2)::text').get(),
-            'Number of cores': response.css('tbody:nth-of-type(2) > tr:nth-of-type(4) > td:nth-of-type(2)::text').get(),
-            'RAM': response.css('tbody:nth-of-type(5) > tr:nth-of-type(1) > td:nth-of-type(2)::text').get(),
-            'SSD': SSD,
-            'HDD': HDD,
-            'Motherboard': response.css('tbody:nth-of-type(4) > tr > td:nth-of-type(2)::text').get(),
-            }
+        img_urls_list = [self.base_url + i for i in response.css("a.thumbnail::attr(href)").getall()]
 
+        # yield {
+        #     'PC name': response.css('div.pp-m-blok h1::text').get(),
+        #     'Price': response.css('span.autocalc-product-special::text').get(),
+        #     'Reviews': response.css('ul.nav.nav-tabs a::text')[4].re(r'\d')[0],
+        #     'Video card': response.css('tbody:nth-of-type(6) > tr:nth-of-type(2) > td:nth-of-type(2)::text').get(),
+        #     'Video memory': response.css('tbody:nth-of-type(6) > tr:nth-of-type(3) > td:nth-of-type(2)::text').get(),
+        #     'Processor': response.css('tbody:nth-of-type(2) > tr:nth-of-type(1) > td:nth-of-type(2)::text').get(),
+        #     'Number of cores': response.css('tbody:nth-of-type(2) > tr:nth-of-type(4) > td:nth-of-type(2)::text').get(),
+        #     'RAM': response.css('tbody:nth-of-type(5) > tr:nth-of-type(1) > td:nth-of-type(2)::text').get(),
+        #     'SSD': SSD,
+        #     'HDD': HDD,
+        #     'Motherboard': response.css('tbody:nth-of-type(4) > tr > td:nth-of-type(2)::text').get(),
+        #     'image_urls': img_urls_list,
+        # }
+
+        yield ComputerItem(
+            name=response.css('div.pp-m-blok h1::text').get(),
+            price=response.css('span.autocalc-product-special::text').get(),
+            reviews=response.css('ul.nav.nav-tabs a::text')[4].re(r'\d')[0],
+            video_card=response.css('tbody:nth-of-type(6) > tr:nth-of-type(2) > td:nth-of-type(2)::text').get(),
+            video_memory=response.css('tbody:nth-of-type(6) > tr:nth-of-type(3) > td:nth-of-type(2)::text').get(),
+            processor=response.css('tbody:nth-of-type(2) > tr:nth-of-type(1) > td:nth-of-type(2)::text').get(),
+            number_of_cores=response.css('tbody:nth-of-type(2) > tr:nth-of-type(4) > td:nth-of-type(2)::text').get(),
+            ram=response.css('tbody:nth-of-type(5) > tr:nth-of-type(1) > td:nth-of-type(2)::text').get(),
+            ssd=SSD,
+            hdd=HDD,
+            motherboard=response.css('tbody:nth-of-type(4) > tr > td:nth-of-type(2)::text').get(),
+            image_urls=img_urls_list
+        )
+
+    def file_distribution(self):
+        pass
