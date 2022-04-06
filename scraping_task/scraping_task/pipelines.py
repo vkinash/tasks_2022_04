@@ -17,7 +17,6 @@ class ScrapingTaskPipeline(ImagesPipeline):
 
     def process_item(self, item, spider):
         # calling dumps to create json data.
-        # ram = re.findall('\d+', item['RAM'])[0]
         ram = item['ram']
         item['image_urls'] = '|'.join([i['path'] for i in item['images']])
         del(item['images'])

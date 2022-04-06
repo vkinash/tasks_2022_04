@@ -11,7 +11,7 @@ How to run the solution of Task 1 (task_1.py):
 1. Create virtual environment.
 2. Install requirements. In directory ```/tasks``` run ```pip install -r requirements.txt```
 3. Run docker-compose. In directory ```/tasks``` run ```docker-compose up -d```
-4. Run the application. in tasks directory run ```python3 task_1.py```
+4. Run the application. in ```tasks/task_1``` directory run ```python3 task_1.py```
 
 After the run will be created two files in directory ```task/output```. 
  ```file_a.csv``` contains generated 1024 rows and 8 columns with generated random data according point "A" of the test task.
