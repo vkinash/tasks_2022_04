@@ -90,5 +90,7 @@ ITEM_PIPELINES = {
 # IMAGES_STORE = '/home/vlad/PycharmProjects/tasks/scraping_task/scraping_task/output/img'
 IMAGES_STORE = 'output/img'
 
+MEDIA_CACHE_SIZE = 0
+
 
 
