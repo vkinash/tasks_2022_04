@@ -18,6 +18,5 @@ class ComputerItem(scrapy.Item):
     ssd = scrapy.Field()
     hdd = scrapy.Field()
     motherboard = scrapy.Field()
-    # These attributes names are used by default for images processing.
     image_urls = scrapy.Field()
     images = scrapy.Field()

@@ -1,8 +1,8 @@
 import csv
-from scrapy.pipelines.images import ImagesPipeline
 import hashlib
+
 from scrapy.utils.python import to_bytes
-#import re
+from scrapy.pipelines.images import ImagesPipeline
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
@@ -19,7 +19,8 @@ class ScrapingTaskPipeline(ImagesPipeline):
         # calling dumps to create json data.
         # ram = re.findall('\d+', item['RAM'])[0]
         ram = item['ram']
-        item['image_urls'] = [i['path'] for i in item['images']]
+        # item['image_urls'] = [i['path'] for i in item['images']]
+        item['image_urls'] = '|'.join([i['path'] for i in item['images']])
         del(item['images'])
         line = self.get_writer(ram)
         line.writerow(item)
@@ -89,6 +90,7 @@ class ScrapingTaskPipeline(ImagesPipeline):
 
 
 class StoreImgPipeline(ImagesPipeline):
-    def file_path(self, request, response=None, info=None):
+    def file_path(self, request, response=None, info=None, *, item=None):
         image_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()
-        return f'full/{image_guid}.jpg'
+        pc_name = item['name'].lower().replace(' ', '_')
+        return f'{pc_name}/{image_guid}.jpg'

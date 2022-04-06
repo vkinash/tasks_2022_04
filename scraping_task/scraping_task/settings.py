@@ -64,7 +64,6 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'scraping_task.pipelines.StoreImgPipeline': 1,
-    #'scrapy.pipelines.images.ImagesPipeline': 1,
     'scraping_task.pipelines.ScrapingTaskPipeline': 300,
 }
 

@@ -22,6 +22,7 @@ networkx==2.7.1
 numpy==1.22.3
 pandas==1.4.1
 parsel==1.6.0
+Pillow==9.1.0
 Protego==0.2.1
 protobuf==3.20.0
 pyasn1==0.4.8
@@ -43,7 +44,7 @@ SQLAlchemy==1.4.34
 tldextract==3.2.0
 toolz==0.11.2
 Twisted==22.2.0
-typing-extensions==4.1.1
+typing_extensions==4.1.1
 urllib3==1.26.9
 w3lib==1.22.0
 zope.interface==5.4.0
