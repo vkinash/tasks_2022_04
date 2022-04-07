@@ -42,7 +42,7 @@ def get_random_string(length):
 
 # B. Считать содержимое файла, заменить нечетные цифры символом #, удалить записи, в которых любая
 # из шести строк начинается с гласной буквы, сохранить отредактированный файл с другим именем.
-def replace_symbols(data_file):
+def replace_symbols(output_file):
     df = get_data(f'{TARGET_FOLDER}/{FILE_A}')
     vowels = ('A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u')
     for i in range(NUMBER_OF_COLUMNS):
@@ -50,7 +50,7 @@ def replace_symbols(data_file):
 
     df.replace('[24680]', '#', regex=True, inplace=True)
 
-    df.to_csv(data_file, index=False, header=False)
+    df.to_csv(output_file, index=False, header=False)
 
 
 def get_data(data_file):
@@ -81,7 +81,11 @@ def delete_data_from_mysql():
 
 # D. Считать содержимое файла из пункта А, создать программно базу данных mongodb, сохранить все данные в коллекцию.
 # Средствами mongo удалить записи, в которых в третьем столбце первый символ буква.
-def get_my_collection(mongodb_url=MONGODB_URL, user=MONGO_USER, password=MONGO_PASS, db=MONGO_DB, collection=MONGO_COLLECTION):
+def get_my_collection(mongodb_url=MONGODB_URL,
+                      user=MONGO_USER,
+                      password=MONGO_PASS,
+                      db=MONGO_DB,
+                      collection=MONGO_COLLECTION):
     client = pymongo.MongoClient(mongodb_url, username=user, password=password)
     db = client[db]
     return db[collection]
